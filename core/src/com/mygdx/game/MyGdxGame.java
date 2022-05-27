@@ -26,14 +26,20 @@ public class MyGdxGame extends ApplicationAdapter {
 	private SpriteBatch batch;
 	private Texture[] passaros;
 	private Texture fundo;
+	private Texture title_screen;
 	private Texture canoBaixo;
 	private Texture canoTopo;
 	private Texture gameOver;
+	private Texture moedaPrata;
+	private Texture moedaOuro;
 
 	private ShapeRenderer shapeRenderer;
 	private Circle circuloPassaro;
 	private Rectangle retanguloCanoCima;
 	private Rectangle retanguloCanoBaixo;
+
+	private Circle colisor_moedaPrata;
+	private Circle colisor_moedaOuro;
 
 	private float larguraDispositivo;
 	private float alturaDispositivo;
@@ -114,14 +120,17 @@ public class MyGdxGame extends ApplicationAdapter {
 
 	private void inicializarTexturas() {
 		passaros = new Texture[3];
-		passaros[0] = new Texture("passaro1.png");
-		passaros[1] = new Texture("passaro2.png");
-		passaros[2] = new Texture("passaro3.png");
+		passaros[0] = new Texture("angrybird_1.png");
+		passaros[1] = new Texture("angrybird_2.png");
+		passaros[2] = new Texture("angrybird_1.png");
 
 		fundo = new Texture("fundo.png");
+		title_screen = new Texture("title_screen.jpg");
 		canoBaixo = new Texture("cano_baixo_maior.png");
 		canoTopo = new Texture("cano_topo_maior.png");
 		gameOver = new Texture("game_over.png");
+		moedaPrata = new Texture("silvercoin.png");
+		moedaOuro = new Texture("goldcoin.png");
 	}
 
 	@Override
@@ -201,6 +210,10 @@ public class MyGdxGame extends ApplicationAdapter {
 		batch.draw(canoBaixo,posicaoCanoHorizontal,alturaDispositivo / 2 - canoBaixo.getHeight()-espacoEntreCanos/2+posicaoCanoVertical);
 		batch.draw(canoTopo, posicaoCanoHorizontal, alturaDispositivo / 2 + espacoEntreCanos / 2 + posicaoCanoVertical);
 		textoPontuacao.draw(batch, String.valueOf(pontos), larguraDispositivo/2,alturaDispositivo-110);
+
+		if(estadoJogo==0){
+			batch.draw(title_screen,0,0,larguraDispositivo, alturaDispositivo);
+		}
 
 		if( estadoJogo == 2){
 			batch.draw(gameOver, larguraDispositivo / 2 - gameOver.getWidth()/2, alturaDispositivo/2);
