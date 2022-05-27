@@ -23,6 +23,7 @@ import java.util.Random;
 
 public class MyGdxGame extends ApplicationAdapter {
 
+	//Declaracao das variaveis das imagens que serao usadas no jogo
 	private SpriteBatch batch;
 	private Texture[] passaros;
 	private Texture fundo;
@@ -33,14 +34,16 @@ public class MyGdxGame extends ApplicationAdapter {
 	private Texture moedaPrata;
 	private Texture moedaOuro;
 
+	//Declaracao das variaveis colisores do jogo
 	private ShapeRenderer shapeRenderer;
 	private Circle circuloPassaro;
 	private Rectangle retanguloCanoCima;
 	private Rectangle retanguloCanoBaixo;
-
 	private Circle colisor_moedaPrata;
 	private Circle colisor_moedaOuro;
 
+
+	//Declaracoes de variaveis que guardar posicoes e dimensoues da tela
 	private float larguraDispositivo;
 	private float alturaDispositivo;
 	private float variacao=0;
@@ -58,16 +61,20 @@ public class MyGdxGame extends ApplicationAdapter {
 	private float posicaoHorizontalPassaro=0;
 	private float posicaoVerticalPassaro=0;
 
+	//Declaracoes das variavies que exibiram os textos no jogo
 	BitmapFont textoPontuacao;
 	BitmapFont textoReiniciar;
 	BitmapFont textoMelhorPontuacao;
 
+	//Declaracoes das variavies de som
 	Sound somVoando;
 	Sound somColisao;
 	Sound somPontuacao;
 
+	//Declaracao da variavel que guarda as preferencias
 	Preferences preferences;
 
+	//Declaracoes das variavies da camera, tela do jogo e dimensoes
 	private OrthographicCamera camera;
 	private Viewport viewport;
 	private final float VIRTUAL_WIDTH = 720;
@@ -133,6 +140,7 @@ public class MyGdxGame extends ApplicationAdapter {
 		moedaOuro = new Texture("goldcoin.png");
 	}
 
+	//
 	@Override
 	public void render () {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
