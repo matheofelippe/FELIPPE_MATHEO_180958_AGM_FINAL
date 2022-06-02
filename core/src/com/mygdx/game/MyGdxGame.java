@@ -31,16 +31,16 @@ public class MyGdxGame extends ApplicationAdapter {
 	private Texture canoBaixo;
 	private Texture canoTopo;
 	private Texture gameOver;
+	private Texture moedaDourada;
 	private Texture moedaPrata;
-	private Texture moedaOuro;
 
 	//Declaracao das variaveis colisores do jogo
 	private ShapeRenderer shapeRenderer;
 	private Circle circuloPassaro;
 	private Rectangle retanguloCanoCima;
 	private Rectangle retanguloCanoBaixo;
-	private Circle colisor_moedaPrata;
-	private Circle colisor_moedaOuro;
+	private Circle circuloMoedaDourada;
+	private Circle circuloMoedaPrata;
 
 
 	//Declaracoes de variaveis que guardar posicoes e dimensoues da tela
@@ -52,7 +52,6 @@ public class MyGdxGame extends ApplicationAdapter {
 	private float posicaoCanoHorizontal;
 	private float posicaoCanoVertical;
 	private float espacoEntreCanos;
-
 	private Random random;
 	private int pontos = 0;
 	private int pontuacaoMaxima = 0;
@@ -60,6 +59,10 @@ public class MyGdxGame extends ApplicationAdapter {
 	private int estadoJogo=0;
 	private float posicaoHorizontalPassaro=0;
 	private float posicaoVerticalPassaro=0;
+	private float posicaoHorizontalMoedaDourada = 0;
+	private float posicaoVerticalMoedaDourada = 0;
+	private float posicaoHorizontalMoedaPrata = 0;
+	private float posicaoVerticalMoedaPrata = 0;
 
 	//Declaracoes das variavies que exibiram os textos no jogo
 	BitmapFont textoPontuacao;
@@ -96,6 +99,13 @@ public class MyGdxGame extends ApplicationAdapter {
 		posicaoCanoHorizontal = larguraDispositivo;
 		espacoEntreCanos = 350;
 
+		posicaoHorizontalMoedaDourada = random.nextInt((int) larguraDispositivo / 2);
+		posicaoVerticalMoedaDourada = random.nextInt((int) alturaDispositivo);
+
+		posicaoHorizontalMoedaPrata = random.nextInt((int) larguraDispositivo / 2);
+		posicaoVerticalMoedaPrata = random.nextInt((int) alturaDispositivo);
+
+
 		textoPontuacao = new BitmapFont();
 		textoPontuacao.setColor(Color.WHITE);
 		textoPontuacao.getData().setScale(10);
@@ -112,6 +122,8 @@ public class MyGdxGame extends ApplicationAdapter {
 		circuloPassaro = new Circle();
 		retanguloCanoBaixo = new Rectangle();
 		retanguloCanoCima = new Rectangle();
+		circuloMoedaDourada = new Circle();
+		circuloMoedaPrata = new Circle();
 
 		somVoando = Gdx.audio.newSound(Gdx.files.internal("som_asa.wav"));
 		somColisao = Gdx.audio.newSound(Gdx.files.internal("som_batida.wav"));
@@ -137,7 +149,7 @@ public class MyGdxGame extends ApplicationAdapter {
 		canoTopo = new Texture("cano_topo_maior.png");
 		gameOver = new Texture("game_over.png");
 		moedaPrata = new Texture("silvercoin.png");
-		moedaOuro = new Texture("goldcoin.png");
+		moedaDourada = new Texture("goldcoin.png");
 	}
 
 	//
@@ -174,6 +186,21 @@ public class MyGdxGame extends ApplicationAdapter {
 			if(posicaoInicialVerticalPassaro > 0 || toqueTela)
 				posicaoInicialVerticalPassaro = posicaoInicialVerticalPassaro - gravidade;
 			gravidade++;
+
+			posicaoHorizontalMoedaDourada -= Gdx.graphics.getDeltaTime() * 200;
+
+			if (posicaoHorizontalMoedaDourada <= -moedaDourada.getWidth()){
+				posicaoHorizontalMoedaDourada = larguraDispositivo;
+				posicaoVerticalMoedaDourada = random.nextInt((int) alturaDispositivo);
+			}
+
+			posicaoHorizontalMoedaPrata -= Gdx.graphics.getDeltaTime() * 200;
+
+			if (posicaoHorizontalMoedaPrata <= -moedaPrata.getWidth()){
+				posicaoHorizontalMoedaPrata = larguraDispositivo;
+				posicaoVerticalMoedaPrata = random.nextInt((int) alturaDispositivo);
+			}
+
 		}else if( estadoJogo == 2){
 			if(pontos > pontuacaoMaxima){
 				pontuacaoMaxima = pontos;
@@ -218,15 +245,16 @@ public class MyGdxGame extends ApplicationAdapter {
 		batch.draw(canoBaixo,posicaoCanoHorizontal,alturaDispositivo / 2 - canoBaixo.getHeight()-espacoEntreCanos/2+posicaoCanoVertical);
 		batch.draw(canoTopo, posicaoCanoHorizontal, alturaDispositivo / 2 + espacoEntreCanos / 2 + posicaoCanoVertical);
 		textoPontuacao.draw(batch, String.valueOf(pontos), larguraDispositivo/2,alturaDispositivo-110);
+		batch.draw(moedaDourada, posicaoHorizontalMoedaDourada, posicaoVerticalMoedaDourada);
+		batch.draw(moedaPrata, posicaoHorizontalMoedaPrata, posicaoVerticalMoedaPrata);
 
 		if(estadoJogo==0){
 			batch.draw(title_screen,0,0,larguraDispositivo, alturaDispositivo);
 		}
 
-		if( estadoJogo == 2){
-			batch.draw(gameOver, larguraDispositivo / 2 - gameOver.getWidth()/2, alturaDispositivo/2);
-			textoReiniciar.draw(batch, "Toque para reiniciar!", larguraDispositivo / 2 - 140, alturaDispositivo/2 - gameOver.getHeight());
-			textoMelhorPontuacao.draw(batch, "Seu record é: "+pontuacaoMaxima+" pontos", larguraDispositivo/2 - 140,alturaDispositivo/2 - gameOver.getHeight());
+		if( estadoJogo == 2){batch.draw(gameOver, larguraDispositivo / 2 - gameOver.getWidth()/2, alturaDispositivo/2);
+			textoReiniciar.draw(batch,"Toque para reiniciar", larguraDispositivo / 2 - 140,alturaDispositivo / 2 - gameOver.getHeight() / 2);
+			textoMelhorPontuacao.draw(batch,"Seu recorde é: "+pontuacaoMaxima+" pontos",larguraDispositivo / 2 - 140, alturaDispositivo / 2 - gameOver.getHeight());
 		}
 		batch.end();
 
@@ -251,14 +279,45 @@ public class MyGdxGame extends ApplicationAdapter {
 
 		);
 
+		circuloMoedaDourada.set(
+				posicaoHorizontalMoedaDourada + moedaDourada.getWidth() / 2,
+				posicaoVerticalMoedaDourada + moedaDourada.getHeight() / 2,
+				moedaDourada.getWidth() / 2
+		);
+
+		// Circulo de colisao da moeda prata
+		circuloMoedaPrata.set(
+				posicaoHorizontalMoedaPrata + moedaPrata.getWidth() / 2,
+				posicaoVerticalMoedaPrata + moedaPrata.getHeight() / 2,
+				moedaPrata.getWidth() / 2
+		);
+
 		boolean colidiuCanoCima = Intersector.overlaps(circuloPassaro, retanguloCanoCima);
 		boolean colidiuCanoBaixo = Intersector.overlaps(circuloPassaro, retanguloCanoBaixo);
+		boolean colidiuMoedaDourada = Intersector.overlaps(circuloPassaro, circuloMoedaDourada);
+		boolean colidiuMoedaPrata = Intersector.overlaps(circuloPassaro, circuloMoedaPrata);
 
 		if(colidiuCanoCima || colidiuCanoBaixo){
 			if(estadoJogo == 1){
 				somColisao.play();
 				estadoJogo = 2;
 			}
+		}
+
+		if (colidiuMoedaPrata){
+			pontos += 5;
+			somPontuacao.play();
+
+			posicaoHorizontalMoedaPrata = larguraDispositivo;
+			posicaoVerticalMoedaPrata = random.nextInt((int) alturaDispositivo);
+		}
+
+		if (colidiuMoedaDourada){
+			pontos += 10;
+			somPontuacao.play();
+
+			posicaoHorizontalMoedaDourada = larguraDispositivo;
+			posicaoVerticalMoedaDourada = random.nextInt((int) alturaDispositivo);
 		}
 
 	}
